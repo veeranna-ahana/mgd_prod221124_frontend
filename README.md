@@ -1,1 +1,1 @@
-# mgd_prod221124_frontend
+# magod-frontend-production
