@@ -13,6 +13,21 @@ export default function PriorityTable({
 }) {
   const [priorityTable, setPriorityTable] = useState([]);
 
+  const [rowSelect, setRowSelect] = useState({});
+
+  const RowSelectPriorityTable = (item, index) => {
+    let list = { ...item, index: index };
+    setRowSelect(list);
+  };
+
+  // Set default row when data is available
+  useEffect(() => {
+    if (ncProgramsTableData && ncProgramsTableData.length > 0) {
+      const defaultRow = { ...ncProgramsTableData[0], index: 0 };
+      setRowSelect(defaultRow);
+    }
+  }, [ncProgramsTableData]);
+
   useEffect(() => {}, [priorityTable]);
   function removeDuplicates(arr) {
     return arr.filter((item, index) => arr.indexOf(item) === index);
@@ -64,41 +79,42 @@ export default function PriorityTable({
   };
 
   //////////////////////////////////////
-//
-const [sortConfig1, setSortConfig1] = useState({ key: null, direction: null });
-const requestSort1 = (key) => {
-  let direction = "asc";
-  if (sortConfig1.key === key && sortConfig1.direction === "asc") {
-    direction = "desc";
-  }
-  setSortConfig1({ key, direction });
-};
+  //
+  const [sortConfig1, setSortConfig1] = useState({
+    key: null,
+    direction: null,
+  });
+  const requestSort1 = (key) => {
+    let direction = "asc";
+    if (sortConfig1.key === key && sortConfig1.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig1({ key, direction });
+  };
 
-const sortedData1 = () => {
-  const dataCopy = [...priorityTable];
-  if (sortConfig1.key) {
-    dataCopy.sort((a, b) => {
-      if (a[sortConfig1.key] < b[sortConfig1.key]) {
-        return sortConfig1.direction === "asc" ? -1 : 1;
-      }
-      if (a[sortConfig1.key] > b[sortConfig1.key]) {
-        return sortConfig1.direction === "asc" ? 1 : -1;
-      }
-      return 0;
-    });
-  }
-  return dataCopy;
-};
+  const sortedData1 = () => {
+    const dataCopy = [...priorityTable];
+    if (sortConfig1.key) {
+      dataCopy.sort((a, b) => {
+        if (a[sortConfig1.key] < b[sortConfig1.key]) {
+          return sortConfig1.direction === "asc" ? -1 : 1;
+        }
+        if (a[sortConfig1.key] > b[sortConfig1.key]) {
+          return sortConfig1.direction === "asc" ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return dataCopy;
+  };
 
   //location
-  const[location,setlocation]=useState([]);
-  useEffect(()=>{
-    axios
-    .post(baseURL + "/location/getlocation", {})
-    .then((response) => {
+  const [location, setlocation] = useState([]);
+  useEffect(() => {
+    axios.post(baseURL + "/location/getlocation", {}).then((response) => {
       setlocation(response.data);
     });
-  },[])
+  }, []);
 
   return (
     <>
@@ -129,11 +145,31 @@ const sortedData1 = () => {
                 <th onClick={() => requestSort("Mtrl_Code")}>Material</th>
                 <th onClick={() => requestSort("Cust_name")}>Cust_Name</th>
                 <th onClick={() => requestSort("CustMtrl")}>Source</th>
-                <th className="textAllign" onClick={() => requestSort("QtyAllotted")}>Allotted</th>
-                <th className="textAllign" onClick={() => requestSort("QtyCut")}>Processed</th>
+                <th
+                  className="textAllign"
+                  onClick={() => requestSort("QtyAllotted")}
+                >
+                  Allotted
+                </th>
+                <th
+                  className="textAllign"
+                  onClick={() => requestSort("QtyCut")}
+                >
+                  Processed
+                </th>
                 <th onClick={() => requestSort("PStatus")}>Status</th>
-                <th className="textAllign" onClick={() => requestSort("EstimatedTime")}>PlanTime</th>
-                <th className="textAllign" onClick={() => requestSort("ActualTime")}>Actual Time</th>
+                <th
+                  className="textAllign"
+                  onClick={() => requestSort("EstimatedTime")}
+                >
+                  PlanTime
+                </th>
+                <th
+                  className="textAllign"
+                  onClick={() => requestSort("ActualTime")}
+                >
+                  Actual Time
+                </th>
                 <th onClick={() => requestSort("Remarks")}>Remarks</th>
               </tr>
             </thead>
@@ -145,8 +181,11 @@ const sortedData1 = () => {
                     <tr
                       style={{ backgroundColor: item.rowColor }}
                       onDoubleClick={() => selectRowTable(item)}
+                      onClick={() => {
+                        RowSelectPriorityTable(item, key);
+                      }}
                       className={
-                        key === priorityTable?.index ? "selcted-row-clr" : ""
+                        key === rowSelect?.index ? "selcted-row-clr" : ""
                       }
                     >
                       <td>
@@ -213,18 +252,40 @@ const sortedData1 = () => {
               <Table striped className="table-data border">
                 <thead className="tableHeaderBGColor table-space">
                   <tr>
-                    <th onClick={() => requestSort1("Program No")}>Program No</th>
+                    <th onClick={() => requestSort1("Program No")}>
+                      Program No
+                    </th>
                     <th onClick={() => requestSort1("Task No")}>Task No</th>
                     <th onClick={() => requestSort1("Machine")}>Machine</th>
                     <th onClick={() => requestSort1("Operation")}>Operation</th>
                     <th onClick={() => requestSort1("Material")}>Material</th>
                     <th onClick={() => requestSort1("Cust_Name")}>Cust_Name</th>
                     <th onClick={() => requestSort1("Source")}>Source</th>
-                    <th className="textAllign" onClick={() => requestSort1("Allotted")}>Allotted</th>
-                    <th className="textAllign" onClick={() => requestSort1("Processed")}>Processed</th>
+                    <th
+                      className="textAllign"
+                      onClick={() => requestSort1("Allotted")}
+                    >
+                      Allotted
+                    </th>
+                    <th
+                      className="textAllign"
+                      onClick={() => requestSort1("Processed")}
+                    >
+                      Processed
+                    </th>
                     <th onClick={() => requestSort1("Status")}>Status</th>
-                    <th className="textAllign" onClick={() => requestSort1("PlanTime")}>PlanTime</th>
-                    <th className="textAllign" onClick={() => requestSort1("Actual Time")}>Actual Time</th>
+                    <th
+                      className="textAllign"
+                      onClick={() => requestSort1("PlanTime")}
+                    >
+                      PlanTime
+                    </th>
+                    <th
+                      className="textAllign"
+                      onClick={() => requestSort1("Actual Time")}
+                    >
+                      Actual Time
+                    </th>
                     <th onClick={() => requestSort1("Remarks")}>Remarks</th>
                   </tr>
                 </thead>
@@ -244,11 +305,17 @@ const sortedData1 = () => {
                       <td>{priorityTable?.Mtrl_Code}</td>
                       <td>{priorityTable?.Cust_name}</td>
                       <td>{priorityTable?.CustMtrl}</td>
-                      <td className="textAllign">{priorityTable?.QtyAllotted}</td>
+                      <td className="textAllign">
+                        {priorityTable?.QtyAllotted}
+                      </td>
                       <td className="textAllign">{priorityTable?.QtyCut}</td>
                       <td>{priorityTable?.PStatus}</td>
-                      <td className="textAllign">{priorityTable?.EstimatedTime}</td>
-                      <td className="textAllign">{priorityTable?.ActualTime}</td>
+                      <td className="textAllign">
+                        {priorityTable?.EstimatedTime}
+                      </td>
+                      <td className="textAllign">
+                        {priorityTable?.ActualTime}
+                      </td>
                       <td>{priorityTable?.Remarks}</td>
                     </tr>
                   ))}

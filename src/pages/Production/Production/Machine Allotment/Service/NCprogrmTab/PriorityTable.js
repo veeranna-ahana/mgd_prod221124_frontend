@@ -20,6 +20,21 @@ export default function PriorityTable({
     return arr.filter((item, index) => arr.indexOf(item) === index);
   }
 
+  const [rowSelect, setRowSelect] = useState({});
+
+  const RowSelectPriorityTable = (item, index) => {
+    let list = { ...item, index: index };
+    setRowSelect(list);
+  };
+
+  useEffect(() => {
+    if (ncProgramsTableData.length > 0) { 
+      let firstItem = { ...ncProgramsTableData[0], index: 0 };
+      setRowSelect(firstItem);
+    }
+  }, [ncProgramsTableData]); 
+  
+
   const selectRowTable = (item) => {
     if (priorityTable.includes(item)) {
     } else {
@@ -151,8 +166,11 @@ export default function PriorityTable({
                       <tr
                         style={{ backgroundColor: item.rowColor }}
                         onDoubleClick={() => selectRowTable(item)}
+                        onClick={() => {
+                          RowSelectPriorityTable(item, key);
+                        }}
                         className={
-                          key === priorityTable?.index ? "selcted-row-clr" : ""
+                          key === rowSelect?.index ? "selcted-row-clr" : ""
                         }
                       >
                         <td>

@@ -38,7 +38,6 @@ export default function ScheduleHeader({
   const blockInvalidChar = (e) =>
     ["e", "E", "+", "-", "."].includes(e.key) && e.preventDefault();
 
-
   const [openShowStatus, setOpenShowStatus] = useState("");
   const openShowStatusPdf = () => {
     setOpenShowStatus(true);
@@ -64,7 +63,9 @@ export default function ScheduleHeader({
   const getPrintStatus = () => {
     // Programmed Status
     axios
-      .get(baseURL + "/scheduleListService/schedulesListStatusProgrammedService")
+      .get(
+        baseURL + "/scheduleListService/schedulesListStatusProgrammedService"
+      )
       .then((response) => {
         // for (let i = 0; i < response.data.length; i++) {
         //   // FOR TgtDelDate
@@ -121,7 +122,9 @@ export default function ScheduleHeader({
 
     //Production Status
     axios
-      .get(baseURL + "/scheduleListService/schedulesListStatusProductionService")
+      .get(
+        baseURL + "/scheduleListService/schedulesListStatusProductionService"
+      )
       .then((response) => {
         // for (let i = 0; i < response.data.length; i++) {
         //   // FOR TgtDelDate
@@ -205,16 +208,13 @@ export default function ScheduleHeader({
     navigate("/Production");
   };
 
-  
   //location
-  const[location,setlocation]=useState([]);
-  useEffect(()=>{
-    axios
-    .post(baseURL + "/location/getlocation", {})
-    .then((response) => {
+  const [location, setlocation] = useState([]);
+  useEffect(() => {
+    axios.post(baseURL + "/location/getlocation", {}).then((response) => {
       setlocation(response.data);
     });
-  },[])
+  }, []);
 
   return (
     <div>
@@ -250,8 +250,9 @@ export default function ScheduleHeader({
             className="input-field mt-2"
             onKeyDown={blockInvalidChar}
             placeholder="Search Schedule"
+            value={searchInput}
             type="text"
-            onChange={(e) => searchText1(e)}
+            onChange={searchText1}
           />
         </div>
 

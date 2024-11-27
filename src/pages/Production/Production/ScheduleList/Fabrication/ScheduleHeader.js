@@ -212,16 +212,13 @@ export default function ScheduleHeader({
     navigate("/Production");
   };
 
-   //location
-   const[location,setlocation]=useState([]);
-   useEffect(()=>{
-     axios
-     .post(baseURL + "/location/getlocation", {})
-     .then((response) => {
-       setlocation(response.data);
-     });
-   },[])
- 
+  //location
+  const [location, setlocation] = useState([]);
+  useEffect(() => {
+    axios.post(baseURL + "/location/getlocation", {}).then((response) => {
+      setlocation(response.data);
+    });
+  }, []);
 
   return (
     <div>
@@ -258,7 +255,8 @@ export default function ScheduleHeader({
             onKeyDown={blockInvalidChar}
             placeholder="Search Schedule"
             type="text"
-            onChange={(e) => searchText1(e)}
+            value={searchInput}
+            onChange={searchText1}
           />
         </div>
         <div className="col-md-2"></div>

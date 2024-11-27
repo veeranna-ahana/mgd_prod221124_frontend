@@ -170,7 +170,7 @@ function Header() {
 							fontWeight: "600",
 						}}
 						onClick={logout}>
-						Sign Out
+						Sign Out (0.01)
 					</button>
 				</div>
 			</nav>

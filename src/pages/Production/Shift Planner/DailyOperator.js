@@ -65,7 +65,7 @@ function DailyOperator(props) {
             position: toast.POSITION.TOP_CENTER,
           });
         } else if (response.data === "Data Successfully Added") {
-          toast.success("Data Successfully Added", {
+          toast.success("Operator successfully added for the day", {
             position: toast.POSITION.TOP_CENTER,
           });
           props.getMachineOperatorTableData();
